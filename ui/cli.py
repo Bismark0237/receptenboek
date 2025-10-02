@@ -1,8 +1,46 @@
+import json
+import os
 from models.recept import Recept
 from models.ingredient import Ingrediënt
 from models.stap import Stap
 
-# -------- Seed data (nu inclusief vegan recept) --------
+# ---------- JSON opslag ----------
+DATA_FILE = os.path.join("data", "recepten.json")
+
+def save_recepten(recepten):
+    os.makedirs("data", exist_ok=True)
+    data = []
+    for r in recepten:
+        data.append({
+            "naam": r.naam,
+            "omschrijving": r.omschrijving,
+            "ingredienten": [
+                {"naam": ing.naam, "hoeveelheid": ing.hoeveelheid, "eenheid": ing.eenheid}
+                for ing in r.ingrediënten
+            ],
+            "stappen": [st.tekst for st in r.stappen],
+        })
+    with open(DATA_FILE, "w", encoding="utf-8") as f:
+        json.dump(data, f, indent=2, ensure_ascii=False)
+    print("✅ Recepten opgeslagen naar data/recepten.json")
+
+def load_recepten():
+    if not os.path.exists(DATA_FILE):
+        return seed_recepten()
+    try:
+        with open(DATA_FILE, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        recepten = []
+        for r in data:
+            ingrediënten = [Ingrediënt(i["naam"], i["hoeveelheid"], i["eenheid"]) for i in r["ingredienten"]]
+            stappen = [Stap(s) for s in r["stappen"]]
+            recepten.append(Recept(r["naam"], r["omschrijving"], ingrediënten, stappen))
+        return recepten
+    except Exception as e:
+        print(f"⚠️ Kon JSON niet laden ({e}). Seed data wordt gebruikt.")
+        return seed_recepten()
+
+# ---------- Seed data (incl. vegan) ----------
 def seed_recepten():
     pasta = Recept(
         "Pasta pesto",
@@ -51,8 +89,7 @@ def seed_recepten():
 
     return [pasta, kip_kerrie, quiche, vegan_chili]
 
-
-# -------- Helpers --------
+# ---------- Helpers ----------
 def _print_detail(r: Recept):
     print(f"\n{r.naam}\n{r.omschrijving}\n\n• Ingrediënten:")
     for ing in r.ingrediënten:
@@ -61,8 +98,7 @@ def _print_detail(r: Recept):
     for nr, st in enumerate(r.stappen, start=1):
         print(f"  {nr}. {st.tekst}")
 
-
-# -------- FR-1: tonen --------
+# ---------- FR-1: tonen ----------
 def toon_recepten(recepten):
     if not recepten:
         print("Geen recepten beschikbaar.")
@@ -78,13 +114,11 @@ def toon_recepten(recepten):
         except ValueError:
             print("Geef een geldig nummer op.")
 
-
-# -------- FR-2: toevoegen --------
+# ---------- FR-2: toevoegen ----------
 def voeg_recept_toe(recepten):
     print("\n— Recept toevoegen —")
     naam = input("Naam: ").strip()
     omschrijving = input("Omschrijving: ").strip()
-
     ingrediënten, stappen = [], []
 
     while True:
@@ -106,12 +140,11 @@ def voeg_recept_toe(recepten):
 
     if naam and omschrijving and ingrediënten and stappen:
         recepten.append(Recept(naam, omschrijving, ingrediënten, stappen))
-        print(f"Recept '{naam}' toegevoegd!")
+        print(f"✅ Recept '{naam}' toegevoegd!")
     else:
-        print("Recept is niet volledig ingevuld.")
+        print("⚠️ Recept is niet volledig ingevuld.")
 
-
-# -------- FR-3: verwijderen --------
+# ---------- FR-3: verwijderen ----------
 def verwijder_recept(recepten):
     if not recepten:
         print("Geen recepten om te verwijderen."); return
@@ -122,12 +155,13 @@ def verwijder_recept(recepten):
         i = int(sel) - 1
         if 0 <= i < len(recepten):
             verwijderd = recepten.pop(i)
-            print(f"Recept '{verwijderd.naam}' verwijderd.")
+            print(f"🗑️ Recept '{verwijderd.naam}' verwijderd.")
+        else:
+            print("Ongeldig nummer.")
     except ValueError:
         print("Geef een geldig nummer op.")
 
-
-# -------- FR-4: bewerken --------
+# ---------- FR-4: bewerken ----------
 def bewerk_recept(recepten):
     if not recepten:
         print("Geen recepten om te bewerken."); return
@@ -182,8 +216,7 @@ def bewerk_recept(recepten):
             weg = r.stappen.pop(k); print(f"Stap '{weg.tekst}' verwijderd.")
         except: print("Ongeldig nummer.")
 
-
-# -------- FR-5: zoeken --------
+# ---------- FR-5: zoeken ----------
 def zoek_recepten(recepten):
     if not recepten:
         print("Geen recepten om te zoeken."); return
@@ -210,17 +243,17 @@ def zoek_recepten(recepten):
                 _print_detail(hits[i])
         except: print("Ongeldig nummer.")
 
-
-# -------- Hoofdmenu --------
+# ---------- Hoofdmenu (Week 4) ----------
 def start():
-    recepten = seed_recepten()
+    recepten = load_recepten()  # ← laad bij start
     while True:
-        print("\n=== Receptenboek (Week 3) ===")
+        print("\n=== Receptenboek (Week 4) ===")
         print("1) Recepten tonen")
         print("2) Recept toevoegen")
         print("3) Recept verwijderen")
         print("4) Recept bewerken")
         print("5) Zoeken")
+        print("6) Opslaan")
         print("0) Afsluiten")
         keuze = input("> ").strip()
 
@@ -229,5 +262,9 @@ def start():
         elif keuze == "3": verwijder_recept(recepten)
         elif keuze == "4": bewerk_recept(recepten)
         elif keuze == "5": zoek_recepten(recepten)
-        elif keuze == "0": break
-        else: print("Ongeldige keuze.")
+        elif keuze == "6": save_recepten(recepten)
+        elif keuze == "0":
+            save_recepten(recepten)  # ← auto-save bij afsluiten
+            break
+        else:
+            print("Ongeldige keuze.")

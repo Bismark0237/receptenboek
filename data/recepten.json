@@ -1,0 +1,107 @@
+[
+  {
+    "naam": "Pasta pesto",
+    "omschrijving": "Snelle pasta met pesto.",
+    "ingredienten": [
+      {
+        "naam": "Spaghetti",
+        "hoeveelheid": 75,
+        "eenheid": "g"
+      },
+      {
+        "naam": "Pesto",
+        "hoeveelheid": 20,
+        "eenheid": "g"
+      }
+    ],
+    "stappen": [
+      "Kook de spaghetti.",
+      "Roer de pesto erdoor."
+    ]
+  },
+  {
+    "naam": "Kip Kerrie",
+    "omschrijving": "Kip kerrie zonder pakjes en zakjes.",
+    "ingredienten": [
+      {
+        "naam": "Kipfilet",
+        "hoeveelheid": 500,
+        "eenheid": "gram"
+      },
+      {
+        "naam": "Sperziebonen",
+        "hoeveelheid": 400,
+        "eenheid": "gram"
+      },
+      {
+        "naam": "Rijst",
+        "hoeveelheid": 200,
+        "eenheid": "gram"
+      }
+    ],
+    "stappen": [
+      "Kook de rijst en sperziebonen.",
+      "Snijd de kip in blokjes en bak ze gaar.",
+      "Voeg kerrie en kokosmelk toe en laat kort pruttelen."
+    ]
+  },
+  {
+    "naam": "Gehakt quiche met paprika",
+    "omschrijving": "Een heerlijke quiche met gehakt en paprika.",
+    "ingredienten": [
+      {
+        "naam": "Gehakt",
+        "hoeveelheid": 300,
+        "eenheid": "gram"
+      },
+      {
+        "naam": "Paprika",
+        "hoeveelheid": 2,
+        "eenheid": "stuks"
+      },
+      {
+        "naam": "Bladerdeeg",
+        "hoeveelheid": 5,
+        "eenheid": "plakken"
+      }
+    ],
+    "stappen": [
+      "Verwarm de oven voor op 200°C.",
+      "Bak het gehakt rul en voeg paprika toe.",
+      "Bekleed de vorm met bladerdeeg en vul met het mengsel.",
+      "Bak 30 minuten in de oven."
+    ]
+  },
+  {
+    "naam": "Vegan Chili Sin Carne",
+    "omschrijving": "Een plantaardige chili met bonen en groenten.",
+    "ingredienten": [
+      {
+        "naam": "Kidneybonen",
+        "hoeveelheid": 400,
+        "eenheid": "g"
+      },
+      {
+        "naam": "Mais",
+        "hoeveelheid": 150,
+        "eenheid": "g"
+      },
+      {
+        "naam": "Paprika",
+        "hoeveelheid": 1,
+        "eenheid": "stuk"
+      },
+      {
+        "naam": "Tomatenblokjes",
+        "hoeveelheid": 400,
+        "eenheid": "g"
+      }
+    ],
+    "stappen": [
+      "Snijd de paprika in stukjes.",
+      "Bak de paprika kort aan.",
+      "Voeg tomatenblokjes, kidneybonen en mais toe.",
+      "Laat 15 minuten sudderen en breng op smaak met kruiden."
+    ]
+  }
+]
